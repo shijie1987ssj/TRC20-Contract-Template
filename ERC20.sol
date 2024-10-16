@@ -1,14 +1,14 @@
 pragma solidity ^0.5.0;
 
-import "./ITRC20.sol";
+import "./IERC20.sol";
 import "./SafeMath.sol";
 
 /**
- * @dev Implementation of the {ITRC20} interface.
+ * @dev Implementation of the {IERC20} interface.
  *
  * This implementation is agnostic to the way tokens are created. This means
  * that a supply mechanism has to be added in a derived contract using {_mint}.
- * For a generic mechanism see {TRC20Mintable}.
+ * For a generic mechanism see {ERC20Mintable}.
  *
  * TIP: For a detailed writeup see our guide
  * https://forum.zeppelin.solutions/t/how-to-implement-erc20-supply-mechanisms/226[How
@@ -16,7 +16,7 @@ import "./SafeMath.sol";
  *
  * We have followed general OpenZeppelin guidelines: functions revert instead
  * of returning `false` on failure. This behavior is nonetheless conventional
- * and does not conflict with the expectations of TRC20 applications.
+ * and does not conflict with the expectations of ERC20 applications.
  *
  * Additionally, an {Approval} event is emitted on calls to {transferFrom}.
  * This allows applications to reconstruct the allowance for all accounts just
@@ -25,9 +25,9 @@ import "./SafeMath.sol";
  *
  * Finally, the non-standard {decreaseAllowance} and {increaseAllowance}
  * functions have been added to mitigate the well-known issues around setting
- * allowances. See {ITRC20-approve}.
+ * allowances. See {IERC20-approve}.
  */
-contract TRC20 is ITRC20 {
+contract ERC20 is IERC20 {
     using SafeMath for uint256;
 
     mapping (address => uint256) private _balances;
@@ -37,21 +37,21 @@ contract TRC20 is ITRC20 {
     uint256 private _totalSupply;
 
     /**
-     * @dev See {ITRC20-totalSupply}.
+     * @dev See {IERC20-totalSupply}.
      */
     function totalSupply() public view returns (uint256) {
         return _totalSupply;
     }
 
     /**
-     * @dev See {ITRC20-balanceOf}.
+     * @dev See {IERC20-balanceOf}.
      */
     function balanceOf(address account) public view returns (uint256) {
         return _balances[account];
     }
 
     /**
-     * @dev See {ITRC20-transfer}.
+     * @dev See {IERC20-transfer}.
      *
      * Requirements:
      *
@@ -64,14 +64,14 @@ contract TRC20 is ITRC20 {
     }
 
     /**
-     * @dev See {ITRC20-allowance}.
+     * @dev See {IERC20-allowance}.
      */
     function allowance(address owner, address spender) public view returns (uint256) {
         return _allowances[owner][spender];
     }
 
     /**
-     * @dev See {ITRC20-approve}.
+     * @dev See {IERC20-approve}.
      *
      * Requirements:
      *
@@ -83,10 +83,10 @@ contract TRC20 is ITRC20 {
     }
 
     /**
-     * @dev See {ITRC20-transferFrom}.
+     * @dev See {IERC20-transferFrom}.
      *
      * Emits an {Approval} event indicating the updated allowance. This is not
-     * required by the EIP. See the note at the beginning of {TRC20};
+     * required by the EIP. See the note at the beginning of {ERC20};
      *
      * Requirements:
      * - `sender` and `recipient` cannot be the zero address.
@@ -104,7 +104,7 @@ contract TRC20 is ITRC20 {
      * @dev Atomically increases the allowance granted to `spender` by the caller.
      *
      * This is an alternative to {approve} that can be used as a mitigation for
-     * problems described in {ITRC20-approve}.
+     * problems described in {IERC20-approve}.
      *
      * Emits an {Approval} event indicating the updated allowance.
      *
@@ -121,7 +121,7 @@ contract TRC20 is ITRC20 {
      * @dev Atomically decreases the allowance granted to `spender` by the caller.
      *
      * This is an alternative to {approve} that can be used as a mitigation for
-     * problems described in {ITRC20-approve}.
+     * problems described in {IERC20-approve}.
      *
      * Emits an {Approval} event indicating the updated allowance.
      *
@@ -151,8 +151,8 @@ contract TRC20 is ITRC20 {
      * - `sender` must have a balance of at least `amount`.
      */
     function _transfer(address sender, address recipient, uint256 amount) internal {
-        require(sender != address(0), "TRC20: transfer from the zero address");
-        require(recipient != address(0), "TRC20: transfer to the zero address");
+        require(sender != address(0), "ERC20: transfer from the zero address");
+        require(recipient != address(0), "ERC20: transfer to the zero address");
 
         _balances[sender] = _balances[sender].sub(amount);
         _balances[recipient] = _balances[recipient].add(amount);
@@ -169,7 +169,7 @@ contract TRC20 is ITRC20 {
      * - `to` cannot be the zero address.
      */
     function _mint(address account, uint256 amount) internal {
-        require(account != address(0), "TRC20: mint to the zero address");
+        require(account != address(0), "ERC20: mint to the zero address");
 
         _totalSupply = _totalSupply.add(amount);
         _balances[account] = _balances[account].add(amount);
@@ -188,7 +188,7 @@ contract TRC20 is ITRC20 {
      * - `account` must have at least `amount` tokens.
      */
     function _burn(address account, uint256 value) internal {
-        require(account != address(0), "TRC20: burn from the zero address");
+        require(account != address(0), "ERC20: burn from the zero address");
 
         _totalSupply = _totalSupply.sub(value);
         _balances[account] = _balances[account].sub(value);
@@ -209,8 +209,8 @@ contract TRC20 is ITRC20 {
      * - `spender` cannot be the zero address.
      */
     function _approve(address owner, address spender, uint256 value) internal {
-        require(owner != address(0), "TRC20: approve from the zero address");
-        require(spender != address(0), "TRC20: approve to the zero address");
+        require(owner != address(0), "ERC20: approve from the zero address");
+        require(spender != address(0), "ERC20: approve to the zero address");
 
         _allowances[owner][spender] = value;
         emit Approval(owner, spender, value);
